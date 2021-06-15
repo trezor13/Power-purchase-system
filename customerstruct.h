@@ -6,5 +6,5 @@ typedef struct customer
     char category[100];
     char cashpowernumber[21];
     char lastPurchaseMonth[12];
-    int monthPurchasedUnits;
+    float monthPurchasedUnits;
 } customer;

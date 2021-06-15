@@ -19,7 +19,7 @@ void viewCustomers()
     fclose(fp1);
     printf("\n\t%d Total customers found.\n\t=================================", i);
     for (i = 0; i < n; i++)
-        printf("\n\t%d) %-20s\t%-20s\t%-20s\t%-20s\t%d", i + 1, customersArr[i].customerNames, customersArr[i].category, customersArr[i].cashpowernumber, customersArr[i].lastPurchaseMonth, customersArr[i].monthPurchasedUnits);
+        printf("\n\t%d) %-20s\t%-20s\t%-20s\t%-20s\t%.2f", i + 1, customersArr[i].customerNames, customersArr[i].category, customersArr[i].cashpowernumber, customersArr[i].lastPurchaseMonth, customersArr[i].monthPurchasedUnits);
 }
 
 void addCustomers()
@@ -44,7 +44,7 @@ void addCustomers()
         printf("\tLast purchase month: ");
         scanf("%s", c2[i].lastPurchaseMonth);
         printf("\tMonth purchase count: ");
-        scanf("%d", &c2[i].monthPurchasedUnits);
+        scanf("%f", &c2[i].monthPurchasedUnits);
         fwrite(&c2[i], sizeof(customer), 1, fp2);
     }
     fclose(fp2);

@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 
+float getUnits(char category[], float amount);
+
 void main()
 {
 	char cashpower_input[21], names[100], category[100], lastPurchaseMonth[12];
@@ -22,8 +24,8 @@ void main()
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
 	char *currentMon = months[tm.tm_mon];
-	int monthPurchasedUnits, customer_index;
-	int input_amount, i = 0, j = 0, cashpower_valid = 0, final_units, n;
+	float input_amount, monthPurchasedUnits;
+	int i = 0, j = 0, cashpower_valid = 0, final_units, n, customer_index;
 	customer customersArr[1000];
 	printf("\n\t=================================\n\t|| Electricity purchase system ||\n\t=================================");
 inputcashpower:
@@ -62,7 +64,17 @@ inputcashpower:
 	}
 	else
 	{
-		if (!strcmp(lastPurchaseMonth, currentMon))
+		printf("\n\tYour info\n\t=================================");
+		printf("\n\tNames: %s", names);
+		printf("\n\tCategory: %s", category);
+		printf("\n\tYour cashpower number: %s", cashpower_input);
+		printf("\n\tPrevious purchase month: %s", lastPurchaseMonth);
+		printf("\n\tUnits this month: %.2f", monthPurchasedUnits);
+		printf("\n\t=================================\n\tAmount of money: ");
+		scanf("%f", &input_amount);
+		float units;
+		units = getUnits(category, input_amount);
+		if (strcmp(lastPurchaseMonth, currentMon))
 		{
 			FILE *fp3;
 			fp3 = fopen("customer_info_binary.csv", "w");
@@ -71,14 +83,173 @@ inputcashpower:
 
 			for (i = 0; i < n; i++)
 				fwrite(&customersArr[i], sizeof(customer), 1, fp3);
+			fclose(fp3);
 		}
-		printf("\n\tYour info\n\t=================================");
-		printf("\n\tNames: %s", names);
-		printf("\n\tCategory: %s", category);
-		printf("\n\tYour cashpower number: %s", cashpower_input);
-		printf("\n\tPrevious purchase month: |%s|", lastPurchaseMonth);
-		printf("\n\tUnits this month: %d", monthPurchasedUnits);
-		printf("\n\t=================================\n\tAmount of money: ");
-		scanf("%d", &input_amount);
+		FILE *fp4;
+		fp4 = fopen("customer_info_binary.csv", "w");
+		customersArr[customer_index].monthPurchasedUnits += units;
+
+		for (i = 0; i < n; i++)
+			fwrite(&customersArr[i], sizeof(customer), 1, fp4);
+		printf("\n\t=================================\n\tPurchased Units: %.2f Kwh\n", units);
+		fclose(fp4);
+	}
+}
+
+float getUnits(char category[], float amount)
+{
+	float units;
+
+	if (strcmp(category, "residential") == 0)
+	{
+		if (amount >= 89)
+		{
+			float round1 = amount / 89;
+			if (round1 <= 15)
+			{
+				units = round1;
+				return units;
+			}
+			else
+			{
+				round1 = 15;
+				float remaining_amount_round1 = amount - 1335;
+				float round2 = remaining_amount_round1 / 212;
+				if (round2 <= 35)
+				{
+					float total_interval2 = round1 + round2;
+					units = total_interval2;
+					return units;
+				}
+				else
+				{
+					round2 = 35;
+					float remaining_amount_round2 = amount - (1335 + 7420);
+					float round3 = remaining_amount_round2 / 249;
+					float total_interval3 = round1 + round2 + round3;
+					units = total_interval3;
+					return units;
+				}
+			}
+		}
+		else
+		{
+			printf("\n\tThe Entered Amount is less than the minmum allowed or you entered invalid characters2.");
+			exit(-1);
+		}
+		return 0;
+	}
+
+	else if (strcmp(category, "nonresidential") == 0)
+	{
+		int amountperUnit = 227;
+		int amountperUnit2 = 255;
+		int standardUnits = 100;
+		int standardAmount = amountperUnit * standardUnits;
+		if ((amount >= amountperUnit))
+		{
+			if ((amount <= standardAmount))
+			{
+				units = amount / amountperUnit;
+				return units;
+			}
+			else
+			{
+				int firstCase = amount - standardAmount;
+				units = (standardAmount / amountperUnit) + (firstCase / amountperUnit2);
+				return units;
+			}
+		}
+		else
+		{
+			printf("\n\tThe Entered Amount is less than the minmum allowed or you entered invalid characters1.");
+			exit(-1);
+		}
+	}
+
+	else if (strcmp(category, "waterTreatment") == 0)
+	{
+		float amountPerunit = 126;
+		if (amount >= amountPerunit)
+		{
+			units = (amount / amountPerunit);
+			return units;
+		}
+		else
+		{
+			printf("\n\tThe amount is less than the min amount allowed or you entered invalid characters");
+			exit(-1);
+		}
+	}
+
+	else if (strcmp(category, "telecomeTowers") == 0)
+	{
+		float amountPerunit = 201;
+		if (amount >= amountPerunit)
+		{
+			units = amount / amountPerunit;
+			return units;
+		}
+		else
+		{
+			printf("\n\tThe amount is less than the min amount allowed or you entered invalid characters");
+			exit(-1);
+		}
+	}
+
+	else if (strcmp(category, "hotel") == 0)
+	{
+		int amountPerunit = 157;
+		if (amount >= amountPerunit)
+		{
+			return units;
+		}
+		else
+		{
+			printf("\n\tThe amount is less than the min amount allowed or you entered invalid characters");
+			exit(-1);
+		}
+	}
+	else if (strcmp(category, "health") == 0)
+	{
+		int amountPerunit = 186;
+		if (amount >= amountPerunit)
+		{
+			units = (amount / amountPerunit);
+			return units;
+		}
+		else
+		{
+			printf("\n\tThe amount is less than the min amount allowed or you entered invalid characters");
+			exit(-1);
+		}
+	}
+	else if (strcmp(category, "broadcasters") == 0)
+	{
+		int amountPerunit = 192;
+		if (amount >= amountPerunit)
+		{
+			units = (amount / amountPerunit);
+			return units;
+		}
+		else
+		{
+			printf("\n\tThe amount is less than the min amount allowed or you entered invalid characters");
+			exit(-1);
+		}
+	}
+	else if (strcmp(category, "dataCenters") == 0)
+	{
+		int amountPerunit = 179;
+		if (amount >= amountPerunit)
+		{
+			units = (amount / amountPerunit);
+			return units;
+		}
+		else
+		{
+			printf("\n\tThe amount is less than the min amount allowed or you entered invalid characters");
+			exit(-1);
+		}
 	}
 }
