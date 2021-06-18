@@ -91,7 +91,6 @@ inputcashpower:
 
 		for (i = 0; i < n; i++)
 			fwrite(&customersArr[i], sizeof(customer), 1, fp4);
-		printf("\n\t=================================\n\tPurchased Units: %.2f Kwh\n", units);
 		fclose(fp4);
 	}
 }
