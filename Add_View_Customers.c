@@ -30,7 +30,7 @@ void addCustomers()
     scanf("%d", &n);
     FILE *fp2;
     customer *c2;
-    c2 = (customer *)calloc(3, sizeof(customer));
+    c2 = (customer *)calloc(n, sizeof(customer));
     fp2 = fopen("customer_info_binary.csv", "a");
     for (i = 0; i < n; i++)
     {
@@ -43,7 +43,7 @@ void addCustomers()
         scanf("%s", c2[i].cashpowernumber);
         printf("\tLast purchase month: ");
         scanf("%s", c2[i].lastPurchaseMonth);
-        printf("\tMonth purchase count: ");
+        printf("\tUnits bough in %s: ", c2[i].lastPurchaseMonth);
         scanf("%f", &c2[i].monthPurchasedUnits);
         fwrite(&c2[i], sizeof(customer), 1, fp2);
     }

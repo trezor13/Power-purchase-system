@@ -3,11 +3,17 @@
 #include <string.h>
 #include <time.h>
 
+typedef struct tokenstruct
+{
+	char content[21];
+	char status[8];
+} tokenstruct;
+
 float getUnits(char category[], float amount);
 
 void main()
 {
-	char cashpower_input[21], names[100], category[100], lastPurchaseMonth[12];
+	char cashpower_input[12], names[100], category[100], lastPurchaseMonth[12];
 	char *months[12];
 	months[0] = "January";
 	months[1] = "February";
@@ -69,7 +75,7 @@ inputcashpower:
 		printf("\n\tCategory: %s", category);
 		printf("\n\tYour cashpower number: %s", cashpower_input);
 		printf("\n\tPrevious purchase month: %s", lastPurchaseMonth);
-		printf("\n\tUnits this month: %.2f", monthPurchasedUnits);
+		printf("\n\tUnits bought in %s: %.2f", lastPurchaseMonth, monthPurchasedUnits);
 		printf("\n\t=================================\n\tAmount of money: ");
 		scanf("%f", &input_amount);
 		float units;
@@ -92,6 +98,36 @@ inputcashpower:
 		for (i = 0; i < n; i++)
 			fwrite(&customersArr[i], sizeof(customer), 1, fp4);
 		fclose(fp4);
+		tokenstruct t1, storedTokens[100], tokens_arr2[1];
+		FILE *fp5;
+		fp5 = fopen("tokens.csv", "r");
+		i = 0;
+		while (fread(&t1, sizeof(tokenstruct), 1, fp5))
+		{
+			storedTokens[i] = t1;
+			i++;
+		}
+		fclose(fp5);
+	generateToken:
+		j = 0;
+		/* Initializes random number generator */
+		time_t t;
+		FILE *fp6;
+		srand((unsigned)time(&t));
+		fp6 = fopen("tokens.csv", "w");
+		j = rand() % i;
+		if (!strcmp(storedTokens[j].status, "used"))
+			goto generateToken;
+		strcpy(storedTokens[j].status, "used");
+		int d;
+		for (d = 0; d < i; d++)
+		{
+			tokens_arr2[0] = storedTokens[d];
+			fwrite(tokens_arr2, sizeof(tokenstruct), 1, fp6);
+		}
+		fclose(fp6);
+		printf("\n\t=================================\n\tPurchased Units: %.2f Kwh", units);
+		printf("\n\tToken to use: %11s\n", storedTokens[j].content);
 	}
 }
 
@@ -201,6 +237,7 @@ float getUnits(char category[], float amount)
 		int amountPerunit = 157;
 		if (amount >= amountPerunit)
 		{
+			units = amount / amountPerunit;
 			return units;
 		}
 		else
