@@ -9,7 +9,7 @@ typedef struct tokenstruct
 	char status[8];
 } tokenstruct;
 
-float getUnits(char category[], float amount);
+float getUnits(char category[], float amount, int unitsSoFar);
 
 void main()
 {
@@ -79,7 +79,7 @@ inputcashpower:
 		printf("\n\t=================================\n\tAmount of money: ");
 		scanf("%f", &input_amount);
 		float units;
-		units = getUnits(category, input_amount);
+		units = getUnits(category, input_amount, monthPurchasedUnits);
 		if (strcmp(lastPurchaseMonth, currentMon))
 		{
 			FILE *fp3;
@@ -131,7 +131,7 @@ inputcashpower:
 	}
 }
 
-float getUnits(char category[], float amount)
+float getUnits(char category[], float amount, int unitsSoFar)
 {
 	float units;
 
@@ -179,7 +179,7 @@ float getUnits(char category[], float amount)
 	{
 		int amountperUnit = 227;
 		int amountperUnit2 = 255;
-		int standardUnits = 100;
+		int standardUnits = 100 - unitsSoFar;
 		int standardAmount = amountperUnit * standardUnits;
 		if ((amount >= amountperUnit))
 		{

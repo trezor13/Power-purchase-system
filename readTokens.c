@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 typedef struct tokenRecord
 {
@@ -11,12 +12,14 @@ void main()
     tokenRecord t1;
     FILE *fp4;
     fp4 = fopen("tokens.csv", "r");
-    int i = 0;
+    int i = 0, used = 0;
     while (fread(&t1, sizeof(tokenRecord), 1, fp4))
     {
         printf("\n\t%s,%s", t1.content, t1.status);
         i++;
+        if (!strcmp(t1.status, "used"))
+            used++;
     }
-    printf("\n\t%d tokens found.", i);
+    printf("\n\t%d tokens found.\n\tUsed: %d Tokens", i, used);
     fclose(fp4);
 }
