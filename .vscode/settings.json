@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "customer_struct.h": "c",
-        "stdlib.h": "c",
-        "string.h": "c",
-        "time.h": "c",
-        "customerstruct.h": "c"
-    }
-}
