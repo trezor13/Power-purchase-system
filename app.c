@@ -76,8 +76,8 @@ int main()
 	}
 	count = getNoOfTokens();
 
-	printf("\n\tCustomer name: %s: ", customerName);
-	printf("\n\tCustomer category: %s: ", customerCategory);
+	printf("\n\tCustomer name: %s ", customerName);
+	printf("\n\tCustomer category: %s ", customerCategory);
 	printf("\n\tPurchased Units: %.2f Kwh", units);
 	// Provide token;
 	printf("\n\tProvided Token: %s", provideToken());
